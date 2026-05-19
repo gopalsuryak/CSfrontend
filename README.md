@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Equity Desk Frontend (Next.js)
 
-## Getting Started
+This folder contains a professional Next.js frontend for the Share Certificates workspace.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS v4
+
+## Run Locally
+
+From this folder:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App URL:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Quality Checks
 
-## Learn More
+```bash
+npm run lint
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/app/layout.tsx`: global layout, fonts, metadata
+- `src/app/globals.css`: design tokens and app styling
+- `src/app/page.tsx`: operations dashboard UI
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes for Integration
 
-## Deploy on Vercel
+- This frontend is integrated directly with the Python workflows through Next.js API bridge routes.
+- No separate legacy UI process is required for day-to-day frontend usage.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Python Bridge Integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project now includes live bridge routes that call your existing Python codebase:
+
+- `GET /api/bridge/companies`
+- `GET /api/bridge/dashboard?companyId=<id>`
+- `POST /api/bridge/registers/generate`
+- `POST /api/bridge/assistant/chat`
+
+The bridge script is located at:
+
+- `../web_api_bridge.py`
+
+By default, Next.js executes:
+
+- `../.venv/Scripts/python.exe`
+
+You can override these with env vars when needed:
+
+- `PYTHON_EXE`
+- `BRIDGE_SCRIPT`
+
+For the AI assistant layer (optional but recommended):
+
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL` (optional, defaults to `gpt-4.1-mini`)
+
+If `OPENAI_API_KEY` is not set, the assistant still works in a limited heuristic mode for shareholding queries and transfer-detail collection.
